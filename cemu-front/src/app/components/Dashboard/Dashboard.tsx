@@ -15,7 +15,7 @@ import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import CustomTopBar from './CustomTopBar';
-import ArticlePerson from '@/public/svg/article_person1.svg';
+import ArticlePerson from '../../../../public/svg/article_person1.svg';
 import ImageIcon from './ImageIcon';
 
 const drawerWidth = 240;
@@ -115,7 +115,7 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               >
                 {item.label === 'Perfiles' ? (
                   <ImageIcon
-                    imageFile={item.icon}
+                    imageFile={"../"}
                     isSelected={selectedPath.includes(item.path)}
                   />
                 ) : (

@@ -64,9 +64,9 @@ export const loginTextFieldBox = {
   width: '22.5rem',
 };
 
-export const ImageGoLoginStyles = { width: 50, display: 'block' };
+export const ImageCemuStyles = { width: 50, display: 'block' };
 
-export const GoLoginTypography = {
+export const CemuTypography = {
   fontSize: '20px',
   textAlign: 'center',
   marginTop: '4px',

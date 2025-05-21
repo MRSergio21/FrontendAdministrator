@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Box, Chip, Stack, Typography } from '@mui/material';
-import { CustomSearchBar } from '@/app/components/TextField/CustomSearchBar';
+import { CustomSearchBar } from '../../../../components/TextField/CumstomSearchBar';
 import SitesTable from '@/app/components/Table/SitesTable';
 import { ClientButton } from '@/app/components/Buttons/ClientButton';
 import projects from './projects';

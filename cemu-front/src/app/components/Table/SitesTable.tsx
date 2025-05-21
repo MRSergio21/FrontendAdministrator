@@ -4,7 +4,7 @@ import React, { useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import EditIcon from '@/public/svg/edit-pencil.svg';
+import EditIcon from '../../../../public/svg/edit-pencil.svg';
 import Image from 'next/image';
 import {
   Box,

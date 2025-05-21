@@ -4,7 +4,7 @@ import React from 'react';
 import { Autocomplete, Box, Button, Stack, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useForm, Controller } from 'react-hook-form';
-import projects from '@/app/pages/private/dashboard/sites/projects';
+import projects from '@/app/(pages)/(private)/dashboard/sites/projects';
 
 type FormData = {
   name: string;
