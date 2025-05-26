@@ -34,7 +34,7 @@ export default function SitesPage() {
           fontSize: '22px',
         }}
       >
-        Gologin
+        CEMU Uneatlantico
       </Typography>
 
       <Box sx={{ bgcolor: '#FFF', width: '100%', borderRadius: '4px' }}>
