@@ -28,7 +28,7 @@ const languages = [
   { code: 'en', label: 'English' },
 ];
 
-export default function GoLogin() {
+export default function Cemu() {
   const [step, setStep] = useState(1);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

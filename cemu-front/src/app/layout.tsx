@@ -17,9 +17,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Gologin',
+  title: 'CEMU Uneatlantico',
   description:
-    'Gologin is a browser profile manager that allows you to create and manage multiple browser profiles for different purposes. It helps you to keep your online activities separate and organized.',
+    'CEMU Uneatlantico is an application designed to help university students manage their professional internships. It allows users to organize and track their internship processes efficiently, keeping all relevant information centralized and accessible.',
 };
 
 export default function RootLayout({

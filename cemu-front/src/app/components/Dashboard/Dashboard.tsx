@@ -10,35 +10,37 @@ import {
   ListItemButton,
   Typography,
 } from '@mui/material';
-import LanguageIcon from '@mui/icons-material/Language';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import CustomTopBar from './CustomTopBar';
 import ArticlePerson from '../../../../public/svg/article_person1.svg';
 import ImageIcon from './ImageIcon';
+import { School, Assessment, ContactPage, AccountBalance } from '@mui/icons-material';
 
 const drawerWidth = 240;
 const collapsedWidth = 95;
 
 const navItems = [
   {
-    label: 'Sitios',
-    path: '/dashboard/sites/',
-    icon: <LanguageIcon />,
+    label: 'Prácticas Profesionales',
+    path: '/dashboard/internesips/',
+    icon: <ContactPage />, 
   },
   {
-    label: 'Perfiles',
-    path: '/dashboard/profiles',
-    icon: ArticlePerson.src,
+    label: 'Empresas',
+    path: '/dashboard/companies/',
+    icon: <AccountBalance />, 
   },
-];
-
-const adminItems = [
   {
-    label: 'Usuarios',
-    path: '/dashboard/users',
-    icon: <PeopleAltOutlinedIcon />,
+    label: 'Grados',
+    path: '/dashboard/degrees/',
+    icon: <School />, 
+  },
+  {
+    label: 'Estadísticas',
+    path: '/dashboard/statistics',
+    icon: <Assessment />,
   },
 ];
 
@@ -125,54 +127,6 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               {sidebarOpen && <ListItemText primary={item.label} />}
             </ListItemButton>
           ))}
-
-          {adminItems.length > 0 && (
-            <>
-              <Box sx={{ mt: '10px' }}>
-                <hr />
-                {sidebarOpen && (
-                  <Typography sx={{ pl: '26px', mt: '10px' }}>
-                    Administración
-                  </Typography>
-                )}
-              </Box>
-
-              {adminItems.map(item => (
-                <ListItemButton
-                  key={item.path}
-                  component={Link}
-                  href={item.path}
-                  onClick={() => handleItemClick(item.path)}
-                  selected={selectedPath.includes(item.path)}
-                  sx={{
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                    pl: sidebarOpen ? '35px' : '20px',
-                    paddingY: '20px',
-                    backgroundColor: selectedPath.includes(item.path)
-                      ? '#E8F0FE'
-                      : 'inherit',
-                    color: selectedPath.includes(item.path)
-                      ? '#01579B'
-                      : 'inherit',
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: sidebarOpen ? 2 : 0,
-                      color: selectedPath.includes(item.path)
-                        ? '#01579B'
-                        : 'inherit',
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  {sidebarOpen && <ListItemText primary={item.label} />}
-                </ListItemButton>
-              ))}
-            </>
-          )}
         </List>
       </Drawer>
 

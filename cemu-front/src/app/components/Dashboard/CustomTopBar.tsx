@@ -23,7 +23,7 @@ const CustomTopBar: React.FC<CustomTopBarProps> = ({
 
         <Typography variant='h6' sx={{ flexGrow: 1, cursor: 'pointer' }}>
           <Link href='/dashboard/sites' passHref onClick={onTopBarClick}>
-            GOLOGIN
+            CEMU Uneatlantico
           </Link>
         </Typography>
 
