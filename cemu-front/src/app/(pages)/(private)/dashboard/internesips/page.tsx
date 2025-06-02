@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Box, Chip, Stack, Typography } from '@mui/material';
 import { CustomSearchBar } from '../../../../components/TextField/CumstomSearchBar';
-import SitesTable from '@/app/components/Table/SitesTable';
+import SitesTable from '../../../../components/Table/SitesTable';
 import { ClientButton } from '@/app/components/Buttons/ClientButton';
 import projects from './projects';
 import { useSearchParams } from 'next/navigation';
@@ -34,7 +34,7 @@ export default function SitesPage() {
           fontSize: '22px',
         }}
       >
-        CEMU Uneatlantico
+        Gologin
       </Typography>
 
       <Box sx={{ bgcolor: '#FFF', width: '100%', borderRadius: '4px' }}>

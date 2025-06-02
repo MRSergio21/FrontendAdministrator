@@ -14,12 +14,12 @@ import {
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-import { CustomSearchBar } from '@/app/components/TextField/CustomSearchBar';
-import { DataTable } from '@/app/components/Table/DataTable';
+import { CustomSearchBar } from '../components/TextField/CumstomSearchBar';
+import { DataTable } from '../components/Table/DataTable';
 import TableInTable from '@/app/components/Table/TableInTable';
 
 import type { Column, Action } from '@/app/utils/types.utils';
-import type { ProfileResponseDTO } from '@/app/models/profile.models';
+import type { ProfileResponseDTO } from '../models/profile.models';
 
 type Props = {
   allProfiles: ProfileResponseDTO[];

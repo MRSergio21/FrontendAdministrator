@@ -1,7 +1,7 @@
 'use client';
 import React, { SetStateAction, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { CustomSearchBar } from '@/app/components/TextField/CustomSearchBar';
+import { CustomSearchBar } from '../../../../components/TextField/CumstomSearchBar';
 import { ClientButton } from '@/app/components/Buttons/ClientButton';
 
 const Users = () => {
