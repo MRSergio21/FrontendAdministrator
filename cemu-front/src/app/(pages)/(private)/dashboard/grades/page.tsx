@@ -1,62 +1,57 @@
-'use client';
-import React, { SetStateAction, useState } from 'react';
-import { Box, Typography } from '@mui/material';
-import { CustomSearchBar } from '../../../../components/TextField/CumstomSearchBar';
-import { ClientButton } from '@/app/components/Buttons/ClientButton';
+"use client";
+import React from "react";
+import { Box, Typography } from "@mui/material";
+import { ClientButton } from "@/app/components/Buttons/ClientButton";
 
 const Users = () => {
-  function setQuery(value: SetStateAction<string>): void {
-    throw new Error('Function not implemented.');
-  }
-
   return (
     <>
-      <Box sx={{ mt: 7, minHeight: '85vh' }}>
+      <Box sx={{ mt: 7, minHeight: "85vh" }}>
         <Typography
           sx={{
             mb: 2,
-            fontFamily: 'Roboto, sans-serif',
+            fontFamily: "Roboto, sans-serif",
             fontWeight: 600,
-            fontSize: '22px',
+            fontSize: "22px",
           }}
         >
-          {' '}
+          {" "}
           Usuarios
         </Typography>
         <Box
           sx={{
-            bgcolor: '#FFF',
-            width: '100%',
-            height: '95%',
-            borderRadius: '4px',
+            bgcolor: "#FFF",
+            width: "100%",
+            height: "95%",
+            borderRadius: "4px",
           }}
         >
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
+              display: "flex",
+              flexDirection: "column",
             }}
           >
             <Box
               sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '24px',
-                pb: '10px',
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "24px",
+                pb: "10px",
               }}
             >
               <Box sx={{}}></Box>
               <Box>
                 <ClientButton
-                  label={'Crear'}
-                  variant={'text'}
+                  label={"Crear"}
+                  variant={"text"}
                   modal={<Box />}
                 />
               </Box>
             </Box>
-            <Box sx={{ p: '24px' }}>
+            <Box sx={{ p: "24px" }}>
               Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque,
               odit. Doloremque animi, dicta, maxime fugit, impedit laborum vitae
               architecto nisi accusantium consectetur pariatur totam saepe

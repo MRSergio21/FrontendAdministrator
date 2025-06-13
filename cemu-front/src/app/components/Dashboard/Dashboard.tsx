@@ -1,5 +1,5 @@
-'use client';
-import React, { useState } from 'react';
+"use client";
+import React, { useState } from "react";
 import {
   Drawer,
   List,
@@ -9,37 +9,42 @@ import {
   useTheme,
   ListItemButton,
   Typography,
-} from '@mui/material';
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import CustomTopBar from './CustomTopBar';
-import ArticlePerson from '../../../../public/svg/article_person1.svg';
-import ImageIcon from './ImageIcon';
-import { School, Assessment, ContactPage, AccountBalance } from '@mui/icons-material';
+} from "@mui/material";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import CustomTopBar from "./CustomTopBar";
+
+import ImageIcon from "./ImageIcon";
+import {
+  School,
+  Assessment,
+  ContactPage,
+  AccountBalance,
+} from "@mui/icons-material";
 
 const drawerWidth = 240;
 const collapsedWidth = 95;
 
 const navItems = [
   {
-    label: 'Prácticas Profesionales',
-    path: '/dashboard/internesips/',
-    icon: <ContactPage />, 
+    label: "Prácticas Profesionales",
+    path: "/dashboard/internships/",
+    icon: <ContactPage />,
   },
   {
-    label: 'Empresas',
-    path: '/dashboard/companies/',
-    icon: <AccountBalance />, 
+    label: "Empresas",
+    path: "/dashboard/companies/",
+    icon: <AccountBalance />,
   },
   {
-    label: 'Grados',
-    path: '/dashboard/degrees/',
-    icon: <School />, 
+    label: "Grados",
+    path: "/dashboard/degrees/",
+    icon: <School />,
   },
   {
-    label: 'Estadísticas',
-    path: '/dashboard/statistics',
+    label: "Estadísticas",
+    path: "/dashboard/statistics",
     icon: <Assessment />,
   },
 ];
@@ -58,37 +63,37 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     setSelectedPath(path);
   };
   const handleTopBarClick = () => {
-    setSelectedPath('/dashboard/sites');
+    setSelectedPath("/dashboard/sites");
   };
 
   return (
-    <Box sx={{ display: 'flex', Height: '100vh', bgcolor: '#EEE' }}>
+    <Box sx={{ display: "flex", Height: "100vh", bgcolor: "#EEE" }}>
       <CustomTopBar
-        username={'Usuario'}
+        username={"Usuario"}
         onMenuClick={handleDrawerToggle}
         onTopBarClick={handleTopBarClick}
       />
 
       <Drawer
-        variant='permanent'
+        variant="permanent"
         sx={{
-          'width': sidebarOpen ? drawerWidth : collapsedWidth,
-          'flexShrink': 0,
-          '& .MuiDrawer-paper': {
+          width: sidebarOpen ? drawerWidth : collapsedWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
             width: sidebarOpen ? drawerWidth : collapsedWidth,
-            boxSizing: 'border-box',
-            transition: theme.transitions.create('width', {
+            boxSizing: "border-box",
+            transition: theme.transitions.create("width", {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.enteringScreen,
             }),
-            boxShadow: 'none',
+            boxShadow: "none",
             zIndex: 1,
-            marginTop: '56px',
+            marginTop: "56px",
           },
         }}
       >
         <List>
-          {navItems.map(item => (
+          {navItems.map((item) => (
             <ListItemButton
               key={item.path}
               component={Link}
@@ -96,14 +101,14 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               onClick={() => handleItemClick(item.path)}
               selected={selectedPath.includes(item.path)}
               sx={{
-                justifyContent: 'center',
-                alignContent: 'center',
-                pl: sidebarOpen ? '35px' : '20px',
-                paddingY: '20px',
+                justifyContent: "center",
+                alignContent: "center",
+                pl: sidebarOpen ? "35px" : "20px",
+                paddingY: "20px",
                 backgroundColor: selectedPath.includes(item.path)
-                  ? '#E8F0FE'
-                  : 'inherit',
-                color: selectedPath.includes(item.path) ? '#01579B' : 'inherit',
+                  ? "#E8F0FE"
+                  : "inherit",
+                color: selectedPath.includes(item.path) ? "#01579B" : "inherit",
               }}
             >
               <ListItemIcon
@@ -111,11 +116,11 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   minWidth: 0,
                   mr: sidebarOpen ? 2 : 0,
                   color: selectedPath.includes(item.path)
-                    ? '#01579B'
-                    : 'inherit',
+                    ? "#01579B"
+                    : "inherit",
                 }}
               >
-                {item.label === 'Perfiles' ? (
+                {item.label === "Perfiles" ? (
                   <ImageIcon
                     imageFile={"../"}
                     isSelected={selectedPath.includes(item.path)}
@@ -131,17 +136,17 @@ const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       </Drawer>
 
       <Box
-        component='main'
+        component="main"
         sx={{
-          height: '100vh',
+          height: "100vh",
           flexGrow: 1,
-          p: '30px',
+          p: "30px",
           pt: 6,
           ml: sidebarOpen ? drawerWidth : collapsedWidth,
-          minHeight: 'calc(100vh - 32px)',
-          backgroundColor: '#F5F5F5',
+          minHeight: "calc(100vh - 32px)",
+          backgroundColor: "#F5F5F5",
           marginLeft: 0,
-          paddingBottom: '28px',
+          paddingBottom: "28px",
         }}
       >
         {children}

@@ -18,8 +18,8 @@
     "hamburger-react": "^2.5.2",
     "next": "15.3.2",
     "nuqs": "^2.4.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-hook-form": "^7.56.4"
   },
   "devDependencies": {
