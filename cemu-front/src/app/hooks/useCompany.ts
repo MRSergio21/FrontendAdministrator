@@ -8,13 +8,13 @@ import { createCompanyAction } from '../actions/api/companies/create';
 import { updateCompanyAction } from '../actions/api/companies/update';
 import { deleteCompanyByIdAction } from '../actions/api/companies/delete';
 
-import type { CompaniesResponseDTO, ComapniesCreationDTO, } from '../models/companies.models';
+import type { CompaniesResponseDTO, CompaniesCreationDTO, } from '../models/companies.models';
 
 // 1) LIST QUERY
 export function useCompaniesQuery(initialData?: CompaniesResponseDTO[]) {
   return useQuery({
     queryKey: ['companies'],
-    queryFn: () => getAllCompanies(1, 10, undefined),
+    queryFn: getAllCompanies,
     initialData,
     refetchOnWindowFocus: false,
   });
@@ -39,7 +39,7 @@ export function useCompanyMutations() {
 
   const createCompany = useMutation({
     mutationKey: ['createCompany'],
-    mutationFn: (data: ComapniesCreationDTO) => createCompanyAction(data),
+    mutationFn: (data: CompaniesCreationDTO) => createCompanyAction(data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['companies'] });
     },
@@ -53,7 +53,7 @@ export function useCompanyMutations() {
       data,
     }: {
       id: string;
-      data: Partial<ComapniesCreationDTO>;
+      data: Partial<CompaniesCreationDTO>;
     }) => updateCompanyAction(id, data),
     onSuccess: (_res, vars) => {
       qc.invalidateQueries({ queryKey: ['companies'] });

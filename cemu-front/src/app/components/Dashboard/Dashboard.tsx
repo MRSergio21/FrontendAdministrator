@@ -19,7 +19,7 @@ const collapsedWidth = 72;
 const navItems = [
   {
     label: 'Prácticas Profesionales',
-    path: '/dashboard/internesips/',
+    path: '/dashboard/interneships/',
     icon: <ContactPage />, 
   },
   {

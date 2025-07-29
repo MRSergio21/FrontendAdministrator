@@ -7,7 +7,7 @@ export async function getCompanyByIdAction(
   id: string,
 ): Promise<CompaniesResponseDTO | null> {
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = process.env.apiUrl;
   try {
     const res = await axios.get<CompaniesResponseDTO>(
       `${apiUrl}/companies/${id}`

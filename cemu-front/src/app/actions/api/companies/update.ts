@@ -7,7 +7,7 @@ export async function updateCompanyAction(
     id: string,
     data: Partial<CompaniesResponseDTO>,
 ): Promise<void> {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = process.env.apiUrl;
     await axios.put(`${apiUrl}/companies/${id}`, data, {
     });
 }
