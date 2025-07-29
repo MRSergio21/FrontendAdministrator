@@ -1,72 +1,102 @@
+'use client';
+
+import React, { useRef, useState } from 'react';
 import {
-  Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
   Button,
+  Box,
+  Stack,
+  Modal,
+  LinearProgress,
+  Fade,
+  Backdrop,
 } from '@mui/material';
-import { JSX } from 'react/jsx-runtime';
+import useFormType from '../../hooks/useFormType';
+import useGlobalModalStore from '../../stores/modal.store';
 
-export default function AlertDialog({
-  open,
-  onClose,
-  onConfirm,
-  title,
-  content,
-  DialogConfirmation,
-  DialogCancel,
-  SecondTitle,
-  SecondaryContent,
-}: {
-  open: boolean;
-  onClose: () => void;
-  onConfirm?: () => void;
-  title: string;
-  content: JSX.Element | string;
-  DialogConfirmation: string;
-  DialogCancel: string;
-  SecondTitle?: string;
-  SecondaryContent?: JSX.Element;
-}) {
+type FormRefType = { submit: () => Promise<{ success: boolean }> };
+
+export default function GlobalModal() {
+  const formRef = useRef<FormRefType>(null);
+  const { open, title, formType, data, closeModal } = useGlobalModalStore();
+  const [pending, setPending] = useState(false);
+
+  const handleConfirm = async () => {
+    if (!formRef.current) return;
+    setPending(true);
+
+    try {
+      const { success } = await formRef.current.submit();
+      if (success) {
+        closeModal();
+      }
+    } catch (err) {
+      console.error('Error ejecutando el formulario:', err);
+    } finally {
+      setPending(false);
+    }
+  };
+
+  const content = useFormType(formType, data, formRef);
+
   return (
-    <Dialog
+    <Modal
       open={open}
-      onClose={onClose}
-      aria-labelledby='alert-dialog-title'
-      aria-describedby='alert-dialog-description'
+      onClose={(_, reason) => {
+        if (reason !== 'backdropClick') closeModal();
+      }}
+      closeAfterTransition
+      slots={{ backdrop: Backdrop }}
+      slotProps={{
+        backdrop: {
+          timeout: 300,
+        },
+      }}
+      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-      <DialogTitle id='alert-dialog-title'>{title}</DialogTitle>
-      <DialogContent sx={{ padding: '16px 24px' }}>{content}</DialogContent>
-      <DialogTitle sx={{ paddingTop: '0', paddingBottom: '0' }}>
-        {SecondTitle}
-      </DialogTitle>
-      <DialogContent sx={{ padding: '0px 24px', fontSize: '18px' }}>
-        {' '}
-        {SecondaryContent}
-      </DialogContent>
-      <DialogActions
-        sx={{
-          paddingTop: '16px',
-          paddingBottom: '24px',
-          paddingLeft: '24px',
-          paddingRight: '24px',
-        }}
-      >
-        <Button
-          sx={{ color: 'black' }}
-          onClick={() => {
-            onConfirm?.();
-            onClose();
+      <Fade in={open} timeout={300}>
+        <Box
+          sx={{
+            position: 'relative',
+            width: 480,
+            bgcolor: '#FFF',
+            borderRadius: '8px',
+            py: 1.5,
+            px: 1,
+            outline: 'none',
           }}
         >
-          {DialogCancel}
-        </Button>
+          <DialogTitle>{title}</DialogTitle>
 
-        <Button onClick={onClose} autoFocus>
-          {DialogConfirmation}
-        </Button>
-      </DialogActions>
-    </Dialog>
+          <DialogContent sx={{ px: 3, pt: 0, pb: 2 }}>{content}</DialogContent>
+
+          <DialogActions sx={{ px: 3, pt: 1, pb: 1 }}>
+            <Stack direction='row' justifyContent='flex-end' spacing={2}>
+              <Button color='inherit' onClick={closeModal} disabled={pending}>
+                Cancelar
+              </Button>
+              <Button onClick={handleConfirm} disabled={pending}>
+                Confirmar
+              </Button>
+            </Stack>
+          </DialogActions>
+
+          {pending && (
+            <LinearProgress
+              sx={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: 4,
+                borderRadius: '0 0 8px 8px',
+              }}
+            />
+          )}
+        </Box>
+      </Fade>
+    </Modal>
   );
 }

@@ -1,25 +1,22 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
 import './globals.css';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
-import { theme } from './theme';
+import { theme } from './theme/theme';
+import { Inter } from 'next/font/google';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { GlobalAlert } from './components/Alert/GlobalAlert';
 
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
-});
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-  weight: '100 900',
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
 });
 
 export const metadata: Metadata = {
-  title: 'CEMU Uneatlantico',
+  title: 'CEMU Untlantico',
   description:
-    'CEMU Uneatlantico is an application designed to help university students manage their professional internships. It allows users to organize and track their internship processes efficiently, keeping all relevant information centralized and accessible.',
+    'TFG - Sergio Mayén, Cemu - Frontend Administrator',
 };
 
 export default function RootLayout({
@@ -29,12 +26,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='es'>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${inter.variable} antialiased`}>
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </ThemeProvider>
         </AppRouterCacheProvider>
+        <GlobalAlert />
       </body>
     </html>
   );

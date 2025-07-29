@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from 'react';
 import {
   Box,
@@ -11,17 +9,17 @@ import {
   TableRow,
   TablePagination,
   IconButton,
+  TableSortLabel,
   Collapse,
 } from '@mui/material';
 import {
-  ArrowUpward as ArrowUpwardIcon,
-  ArrowDownward as ArrowDownwardIcon,
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
 } from '@mui/icons-material';
-import { Column, Data, TableProps } from '@/app/utils/types.utils';
 import TablePaginationActions from './TablePaginationActions';
 import RowActionsMenu from './RowActionsMenu';
+import EmptyState from './EmptyState';
+import { Column, Data, TableProps } from '@/app/utils/types.utils';
 
 export function DataTable<T extends Data>({
   columns,
@@ -36,124 +34,151 @@ export function DataTable<T extends Data>({
   isLoading,
   SkeletonRow,
   tableName,
-  sortBy,
   orderDirection,
   handleChangeSort,
-  height = '62vh',
   collapsible = false,
+  rounded = true,
   renderRowDetail,
 }: TableProps<T>) {
   const [openRows, setOpenRows] = useState<Record<number, boolean>>({});
 
-  const toggleRow = (idx: number) => {
+  const toggleRow = (idx: number) =>
     setOpenRows(prev => ({ ...prev, [idx]: !prev[idx] }));
-  };
 
   const renderCell = (column: Column, row: T) => {
+    if (column.render) {
+      return column.render(row[column.id], row);
+    }
     const value = row[column.id];
     return value ?? '-';
   };
 
-  const containerSx = {
-    height,
+  const cellHeight = '50px';
+
+  const headerCellSx = {
+    position: 'sticky',
+    top: 0,
+    zIndex: 2,
+    backgroundColor: '#E0E0E0',
+    paddingY: '8px',
+    paddingX: '16px',
+    fontSize: '12px',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    height: cellHeight,
     maxWidth: '100%',
-    borderBottom: 'none',
-    borderRadius: '4px 4px 0 0',
-    border: '1px solid #E0E0E0',
-    fontSize: '13px',
   };
 
   const cellSx = {
     backgroundColor: '#fff',
-    padding: '8px',
+    paddingY: '5px',
+    paddingX: '16px',
     fontSize: '13px',
-    width: '148px',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-    height: '28px',
+    maxWidth: '100%',
+    height: cellHeight,
   };
-
-  const headerCellSx = {
-    ...cellSx,
-    cursor: 'default',
-    backgroundColor: '#E0E0E0',
-  };
-
-  const rowSx = { height: '12px' };
+  const rowSx = { height: cellHeight };
   const paginationSx = {
-    backgroundColor: '#fff',
-    borderRadius: '0 0 4px 4px',
-    border: '1px solid #E0E0E0',
+    'backgroundColor': '#fff',
+    'borderRadius': rounded ? '0 0 8px 8px' : 0,
+    'border': '1px solid #E0E0E0',
+    '& .MuiTablePagination-select': {
+      color: '#424242',
+    },
   };
+
+  // total columns (for EmptyState and collapse rows)
+  const totalCols = columns.length + (collapsible ? 1 : 0) + (actions ? 1 : 0);
 
   return (
     <Box
       key={tableName}
-      sx={{ backgroundColor: '#fff', borderRadius: '0 0 4px 4px' }}
+      sx={{
+        backgroundColor: '#fff',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: 0, // <— critical for flex children to shrink
+      }}
     >
-      <TableContainer sx={containerSx}>
-        <Table
-          stickyHeader
-          aria-label='collapsible table'
-          sx={{ minWidth: 500 }}
+      {/* Scrollable table area */}
+      <Box
+        sx={{
+          flex: 1,
+          minHeight: '100%',
+          overflowX: 'auto',
+          overflowY: 'hidden',
+        }}
+      >
+        <TableContainer
+          sx={{
+            height: '100%',
+            overflowY: 'auto',
+            overflowX: 'auto',
+            borderTop: '1px solid #E0E0E0',
+            borderLeft: '1px solid #E0E0E0',
+            borderRight: '1px solid #E0E0E0',
+            borderRadius: rounded ? '8px 8px 0 0' : 0,
+            fontSize: '13px',
+          }}
         >
-          <TableHead>
-            <TableRow sx={rowSx}>
-              {collapsible && <TableCell sx={headerCellSx} />}
-              {/* expand arrow header */}
-              {columns.map(col => (
-                <TableCell key={col.id} align={col.align} sx={headerCellSx}>
-                  {col.sortable && handleChangeSort ? (
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: col.align || 'left',
-                        alignItems: 'center',
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => handleChangeSort(col.id)}
-                    >
-                      <Box>{col.label}</Box>
-                      <Box sx={{ ml: 0.5 }}>
-                        {sortBy === col.id ? (
-                          orderDirection === 'asc' ? (
-                            <ArrowUpwardIcon fontSize='small' />
-                          ) : (
-                            <ArrowDownwardIcon fontSize='small' />
-                          )
-                        ) : (
-                          <ArrowDownwardIcon
-                            fontSize='small'
-                            sx={{ opacity: 0.5 }}
-                          />
-                        )}
+          <Table
+            stickyHeader
+            sx={{ tableLayout: 'auto', width: '100%', minWidth: 'max-content' }}
+          >
+            <TableHead>
+              <TableRow sx={rowSx}>
+                {collapsible && <TableCell sx={headerCellSx} />}
+                {columns.map(col => (
+                  <TableCell
+                    key={col.id}
+                    align={col.align}
+                    sx={{
+                      ...headerCellSx,
+                    }}
+                  >
+                    {col.sortable && handleChangeSort ? (
+                      <TableSortLabel
+                        active={true}
+                        direction={orderDirection}
+                        onClick={() => handleChangeSort(col.id)}
+                        sx={{
+                          display: 'flex',
+                          justifyContent: col.align ?? 'left',
+                          width: '100%',
+                        }}
+                      >
+                        {col.label}
+                      </TableSortLabel>
+                    ) : (
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: col.align ?? 'left',
+                          width: '100%',
+                        }}
+                      >
+                        {col.icon && <Box sx={{ mr: 0.5 }}>{col.icon}</Box>}
+                        {col.label}
                       </Box>
-                    </Box>
-                  ) : (
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: col.align || 'left',
-                        alignItems: 'center',
-                      }}
-                    >
-                      {col.icon && <Box sx={{ mr: 0.5 }}>{col.icon}</Box>}
-                      <Box>{col.label}</Box>
-                    </Box>
-                  )}
-                </TableCell>
-              ))}
-              {actions && <TableCell sx={headerCellSx} />}
-            </TableRow>
-          </TableHead>
+                    )}
+                  </TableCell>
+                ))}
+                {actions && <TableCell sx={headerCellSx} />}
+              </TableRow>
+            </TableHead>
 
-          <TableBody>
-            {isLoading
-              ? Array.from({ length: rowsPerPage }).map((_, i) => (
+            <TableBody>
+              {isLoading ? (
+                Array.from({ length: rowsPerPage }).map((_, i) => (
                   <SkeletonRow key={i} />
                 ))
-              : data.map((row, rowIndex) => {
+              ) : data.length > 0 ? (
+                data.map((row, rowIndex) => {
                   const isOpen = Boolean(openRows[rowIndex]);
                   const rowActions =
                     typeof actions === 'function'
@@ -162,7 +187,7 @@ export function DataTable<T extends Data>({
 
                   return (
                     <React.Fragment key={rowIndex}>
-                      <TableRow>
+                      <TableRow sx={rowSx}>
                         {collapsible && (
                           <TableCell sx={cellSx}>
                             <IconButton
@@ -191,42 +216,49 @@ export function DataTable<T extends Data>({
                       </TableRow>
 
                       {collapsible && isOpen && renderRowDetail && (
-                        <TableRow>
+                        <TableRow sx={rowSx}>
                           <TableCell
-                            colSpan={
-                              /* collapse + columns + actions */
-                              1 + columns.length + (rowActions ? 1 : 0)
-                            }
+                            colSpan={totalCols}
                             sx={{ p: 0, border: 'none' }}
                           >
                             <Collapse in={isOpen} timeout='auto' unmountOnExit>
-                              <Box sx={{ p: 2 }}>{renderRowDetail(row)}</Box>
+                              <Box sx={{ p: 0 }}>{renderRowDetail(row)}</Box>
                             </Collapse>
                           </TableCell>
                         </TableRow>
                       )}
                     </React.Fragment>
                   );
-                })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                })
+              ) : (
+                <EmptyState
+                  title='No hay datos para mostrar'
+                  colLength={totalCols}
+                />
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
 
-      <TablePagination
-        component='div'
-        count={totalCount}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        rowsPerPageOptions={rowsPerPageOptions}
-        ActionsComponent={TablePaginationActions}
-        labelRowsPerPage='Filas por página:'
-        labelDisplayedRows={({ from, to, count }) =>
-          `${from}-${to} de ${count}`
-        }
-        sx={paginationSx}
-      />
+      {/* Static Pagination Bar at Bottom */}
+      <Box sx={{ flexShrink: 0 }}>
+        <TablePagination
+          component='div'
+          count={totalCount}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={rowsPerPageOptions}
+          ActionsComponent={TablePaginationActions}
+          labelRowsPerPage='Filas por página:'
+          labelDisplayedRows={({ from, to, count }) =>
+            `${from}-${to} de ${count}`
+          }
+          sx={paginationSx}
+        />
+      </Box>
     </Box>
   );
 }

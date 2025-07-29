@@ -1,30 +1,22 @@
 'use client';
-import React, { useState } from 'react';
-import Hamburger from 'hamburger-react';
+import React from 'react';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 
 type HamburgerIconProps = {
   onMenuClick: () => void;
 };
 
 const HamburgerIcon: React.FC<HamburgerIconProps> = ({ onMenuClick }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleClick = () => {
-    setIsOpen(!isOpen);
-    onMenuClick();
-  };
-
   return (
-    <Hamburger
-      size={24}
-      toggled={isOpen}
-      toggle={handleClick}
-      direction='left'
-      color='white'
-      label='Show menu'
-      duration={0.5}
-      easing='ease'
-    />
+    <IconButton
+      color='inherit'
+      aria-label='menu'
+      onClick={onMenuClick}
+      sx={{ p: 0 }}
+    >
+      <MenuIcon fontSize='inherit' sx={{ fontSize: 24 }} />
+    </IconButton>
   );
 };
 

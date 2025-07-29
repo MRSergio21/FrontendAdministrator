@@ -16,10 +16,10 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { CustomSearchBar } from '../components/TextField/CumstomSearchBar';
 import { DataTable } from '../components/Table/DataTable';
-import TableInTable from '@/app/components/Table/TableInTable';
+import TableInTable from '@/app/components/Table/EmptyState';
 
 import type { Column, Action } from '@/app/utils/types.utils';
-import type { ProfileResponseDTO } from '../models/profile.models';
+import type { ProfileResponseDTO } from '../models/companies.models';
 
 type Props = {
   allProfiles: ProfileResponseDTO[];

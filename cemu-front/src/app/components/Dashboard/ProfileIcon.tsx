@@ -1,10 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useUser } from '@/app/context/UserContext';
+import { logout } from '@/app/actions/auth/logout';
 
 const ProfileIcon: React.FC = () => {
+  const { username } = useUser();
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -16,11 +21,9 @@ const ProfileIcon: React.FC = () => {
   };
 
   const handleLogout = async () => {
-    await fetch('/api/auth/logout');
-    window.location.reload();
+    await logout();
+    router.push('/login');
   };
-
-  const username: string = '';
 
   return (
     <>
@@ -29,8 +32,8 @@ const ProfileIcon: React.FC = () => {
       </IconButton>
 
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem disabled>{username || 'Loading...'}</MenuItem>
-        <MenuItem onClick={handleLogout}>Log out</MenuItem>
+        <MenuItem disabled>{username || 'Cargando...'}</MenuItem>
+        <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
       </Menu>
     </>
   );
