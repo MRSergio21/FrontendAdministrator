@@ -3,6 +3,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import AppLayout from '../../../../layouts/AppLayout'; // Ajusta import según tu estructura
 import DegreesView from '../../../../views/DegreesView';
 import type { DegreesResponseDTO } from '../../../../models/degrees.model';
+import { Box, Typography } from '@mui/material';
 
 async function fetchDegrees(): Promise<DegreesResponseDTO[]> {
   const apiUrl = process.env.apiUrl || 'http://localhost:4000';
@@ -20,10 +21,22 @@ export default async function DegreesPage() {
   }
 
   return (
-    <AppLayout title="Grados Académicos">
-      <Suspense fallback={<CircularProgress sx={{ m: 'auto', mt: 4 }} />}>
-        <DegreesView allDegrees={degreesList} />
-      </Suspense>
+    <AppLayout topContent={undefined}>
+      <Box sx={{ mt: 0, minHeight: "80vh" }}>
+        <Typography
+          sx={{
+            mb: 2,
+            fontFamily: "Sans-serif",
+            fontWeight: 600,
+            fontSize: "22px",
+          }}
+        >
+          Lista de Grados
+        </Typography>
+        <Suspense fallback={<CircularProgress sx={{ m: 'auto', mt: 4 }} />}>
+          <DegreesView allDegrees={degreesList} />
+        </Suspense>
+      </Box>
     </AppLayout>
   );
 }

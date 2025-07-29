@@ -14,9 +14,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Gologin',
+  title: 'CEMU Untlantico',
   description:
-    'Gologin is a browser profile manager that allows you to create and manage multiple browser profiles for different purposes. It helps you to keep your online activities separate and organized.',
+    'TFG - Sergio Mayén, Cemu - Frontend Administrator',
 };
 
 export default function RootLayout({

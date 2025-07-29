@@ -3,7 +3,7 @@
 import axios from 'axios';
 import { DegreesResponseDTO } from '../../../models/degrees.model';
 
-export async function getAllDegrees(page: any, rows: any, p0: any): Promise<
+export async function getAllDegrees(): Promise<
   DegreesResponseDTO[]
 > {
 

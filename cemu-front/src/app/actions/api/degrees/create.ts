@@ -6,9 +6,10 @@ import { DegreesResponseDTO, DegreesCreationDTO } from '../../../models/degrees.
 export async function createDegreeAction(
     data: DegreesCreationDTO,
 ): Promise<DegreesResponseDTO> {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = process.env.apiUrl;
     const res = await axios.post<DegreesResponseDTO>(
-        `${apiUrl}/degrees/`
+        `${apiUrl}/degrees/`,
+        data
     );
 
     return res.data;

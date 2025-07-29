@@ -22,8 +22,8 @@ const CustomTopBar: React.FC<CustomTopBarProps> = ({
           variant='h6'
           sx={{ flexGrow: 1, cursor: 'pointer', fontSize: '18px' }}
         >
-          <Link href='/dashboard/profiles' passHref onClick={onTopBarClick}>
-            GoLogin
+          <Link href='/dashboard/interneship' passHref onClick={onTopBarClick}>
+            CEMU Uneatlantico
           </Link>
         </Typography>
 

@@ -17,7 +17,7 @@ import type {
 export function useDegreesQuery(initialData?: DegreesResponseDTO[]) {
   return useQuery({
     queryKey: ['degrees'],
-    queryFn: () => getAllDegrees(1, 10, undefined),
+    queryFn: getAllDegrees,
     initialData,
     refetchOnWindowFocus: false,
   });
@@ -41,16 +41,17 @@ export function useDegreeMutations() {
   const qc = useQueryClient();
 
   const createDegree = useMutation({
-    mutationKey: ['createDegree'],
     mutationFn: (data: DegreesCreationDTO) => createDegreeAction(data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['degrees'] });
+    },
+    onError: error => {
+      console.error('Error creating degree:', error);
     },
     retry: 3,
   });
 
   const updateDegree = useMutation({
-    mutationKey: ['updateDegree'],
     mutationFn: ({
       id,
       data,
@@ -62,20 +63,26 @@ export function useDegreeMutations() {
       qc.invalidateQueries({ queryKey: ['degrees'] });
       qc.invalidateQueries({ queryKey: ['degree', vars.id] });
     },
+    onError: error => {
+      console.error('Error updating degree:', error);
+    },
     retry: 3,
   });
 
   const deleteDegree = useMutation({
-    mutationKey: ['deleteDegree'],
     mutationFn: async ({ id }: { id: string }) => {
-      const errMsg = await deleteDegreeByIdAction(id);
-      if (typeof errMsg === 'string') {
-        throw new Error(errMsg);
+      const result = await deleteDegreeByIdAction(id);
+      if (typeof result === 'string') {
+        throw new Error(result);
       }
+      return result;
     },
     onSuccess: (_res, vars) => {
       qc.invalidateQueries({ queryKey: ['degrees'] });
       qc.invalidateQueries({ queryKey: ['degree', vars.id] });
+    },
+    onError: error => {
+      console.error('Error deleting degree:', error);
     },
     retry: 3,
   });

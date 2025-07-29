@@ -5,7 +5,7 @@ import axios from 'axios';
 export async function deleteDegreeByIdAction(
     id: string,
 ): Promise<null | string> {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = process.env.apiUrl;
     try {
         await axios.delete(`${apiUrl}/degrees/${id}`);
         return null;
