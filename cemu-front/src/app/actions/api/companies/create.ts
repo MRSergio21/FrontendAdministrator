@@ -6,9 +6,10 @@ import { CompaniesResponseDTO, CompaniesCreationDTO } from '../../../models/comp
 export async function createCompanyAction(
     data: CompaniesCreationDTO,
 ): Promise<CompaniesResponseDTO> {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = process.env.apiUrl;
     const res = await axios.post<CompaniesResponseDTO>(
-        `${apiUrl}/companies/`
+        `${apiUrl}/companies/`,
+        data
     );
 
     return res.data;

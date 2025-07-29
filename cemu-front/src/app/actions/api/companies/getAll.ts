@@ -3,13 +3,13 @@
 import axios from 'axios';
 import { CompaniesResponseDTO } from '../../../models/companies.models';
 
-export async function getAllCompanies(page: any, rows: any, p0: any): Promise<
+export async function getAllCompanies(): Promise<
   CompaniesResponseDTO[]
 > {
 
-const apiUrl = process.env.apiUrl;
-const res = await axios.get<CompaniesResponseDTO[]>(
+  const apiUrl = process.env.apiUrl;
+  const res = await axios.get<CompaniesResponseDTO[]>(
     `${apiUrl}/companies/`
-);
+  );
   return res.data;
 }

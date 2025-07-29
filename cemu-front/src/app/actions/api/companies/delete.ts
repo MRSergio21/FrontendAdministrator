@@ -5,9 +5,9 @@ import axios from 'axios';
 export async function deleteCompanyByIdAction(
     id: string,
 ): Promise<null | string> {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = process.env.apiUrl;
     try {
-        await axios.delete(`${apiUrl}companies/${id}`);
+        await axios.delete(`${apiUrl}/companies/${id}`);
         return null;
     } catch (err: any) {
         if (err.response?.status === 404) return null;
