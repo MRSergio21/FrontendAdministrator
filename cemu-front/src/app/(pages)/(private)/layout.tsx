@@ -1,24 +1,28 @@
-import GlobalModal from '@/app/components/Modal/GlobalModal';
-import ReactQueryProvider from '@/app/providers/ReactQueryProvider';
-import { UserProvider } from '@/app/providers/UserProvider';
-// import { cookies } from 'next/headers';
-// import { redirect } from 'next/navigation';
-// import { getUserFromToken } from '@/app/api/auth/getUserFromToken';
+import GlobalModal from '../../components/Modal/GlobalModal';
+import ReactQueryProvider from '../../providers/ReactQueryProvider';
+import { UserProvider } from '../../providers/UserProvider';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { verifyToken } from '../../actions/auth/verifyToken';
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Eliminamos la verificación de token y usuario
+  const cookieStore = await cookies();
+  const token = cookieStore.get('auth-token')?.value;
+
+  if (!token) redirect('/login');
+
+  const user = await verifyToken(token);
+  if (!user) redirect('/login');
 
   return (
     <ReactQueryProvider>
-      <UserProvider user={null}>
+      <UserProvider user={user}>
         {children}
-        <GlobalModal open={false} onClose={function (): void {
-          throw new Error('Function not implemented.');
-        }} title={''} content={''} DialogConfirmation={''} DialogCancel={''} />
+        <GlobalModal />
       </UserProvider>
     </ReactQueryProvider>
   );

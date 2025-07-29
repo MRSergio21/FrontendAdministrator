@@ -4,29 +4,25 @@ import { useMemo } from 'react';
 import { useQueryState } from 'nuqs';
 import {
   Box,
-  Chip,
   Skeleton,
   Stack,
   TableCell,
   TableRow,
-  Typography,
 } from '@mui/material';
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import SchoolIcon from '@mui/icons-material/School';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { CustomSearchBar } from '../components/TextField/CumstomSearchBar';
 import { DataTable } from '../components/Table/DataTable';
-import TableInTable from '@/app/components/Table/EmptyState';
 
 import type { Column, Action } from '@/app/utils/types.utils';
-import type { ProfileResponseDTO } from '../models/companies.models';
+import type { DegreesResponseDTO } from '../models/degrees.model';
 
 type Props = {
-  allProfiles: ProfileResponseDTO[];
+  allDegrees: DegreesResponseDTO[];
 };
 
-export default function ProfilesView({ allProfiles }: Props) {
-  // — URL‐synced state via nuqs —
+export default function DegreesView({ allDegrees }: Props) {
   const [searchQuery, setSearchQuery] = useQueryState('search');
   const [page, setPage] = useQueryState('page', {
     defaultValue: 0,
@@ -40,7 +36,7 @@ export default function ProfilesView({ allProfiles }: Props) {
   });
 
   const [sortBy, setSortBy] = useQueryState('sortBy', {
-    defaultValue: 'siteCount',
+    defaultValue: 'name',
   });
 
   const [orderDir, setOrderDir] = useQueryState<'asc' | 'desc'>('orderDir', {
@@ -49,88 +45,75 @@ export default function ProfilesView({ allProfiles }: Props) {
     serialize: String,
   });
 
-  // — 1) Filter —
   const filtered = useMemo(() => {
     const q = searchQuery?.trim().toLowerCase() ?? '';
-    if (!q) return allProfiles;
-    return allProfiles.filter(p => p.profilename.toLowerCase().includes(q));
-  }, [allProfiles, searchQuery]);
+    if (!q) return allDegrees;
+    return allDegrees.filter(degree =>
+      degree.name.toLowerCase().includes(q),
+    );
+  }, [allDegrees, searchQuery]);
 
-  // — 2) Sort —
   const sorted = useMemo(() => {
     if (!sortBy) return filtered;
     return [...filtered].sort((a, b) => {
       const aVal = (a as any)[sortBy];
       const bVal = (b as any)[sortBy];
-
-      // numbers
       if (typeof aVal === 'number' && typeof bVal === 'number') {
         return orderDir === 'asc' ? aVal - bVal : bVal - aVal;
       }
-      // strings
       return orderDir === 'asc'
         ? String(aVal).localeCompare(String(bVal))
         : String(bVal).localeCompare(String(aVal));
     });
   }, [filtered, sortBy, orderDir]);
 
-  // — 3) Paginate —
   const paginated = useMemo(
     () => sorted.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [sorted, page, rowsPerPage],
   );
 
-  // — 4) Build DataTable rows —
-  const tableData = paginated.map(profile => ({
-    id: profile.id,
-    name: profile.profilename,
-    emails: profile.emails.map(e => (
-      <Chip key={e.id} label={e.email} size='small' />
-    )),
-    siteCount: profile.emails.reduce((acc, e) => acc + e.roles.length, 0),
-    status: <Chip label='Active' size='small' color='success' />,
+  const tableData = paginated.map(degree => ({
+    id: degree.id,
+    name: degree.name,
+    degreeCount: degree.degreesIds?.length ?? 0,
   }));
 
   const columns: Column[] = [
-    { id: 'name', label: 'Profile' },
-    { id: 'emails', label: 'Emails' },
-    { id: 'siteCount', label: 'Sites', align: 'center', sortable: true },
-    { id: 'status', label: 'Status', align: 'center' },
+    { id: 'name', label: 'Nombre del Grado' },
+    {
+      id: 'degreeCount',
+      label: 'Titulaciones relacionadas',
+      align: 'center',
+      sortable: true,
+    },
   ];
 
   const rowActions = (row: (typeof tableData)[0]): Action[] => [
     {
       id: 'view',
-      name: 'View',
-      icon: <PermIdentityIcon />,
-      onClick: () => console.log('Viewing', row.name),
+      name: 'Ver',
+      icon: <SchoolIcon />,
+      onClick: () => console.log('Ver grado:', row.name),
       outsideMenu: false,
     },
     {
       id: 'more',
-      name: 'More',
+      name: 'Más',
       icon: <MoreVertIcon />,
-      onClick: () => console.log('More for', row.name),
+      onClick: () => console.log('Más sobre:', row.name),
       outsideMenu: false,
     },
   ];
 
   return (
     <>
-      {/* Search bar */}
-      <Stack
-        direction='row'
-        justifyContent='space-between'
-        alignItems='center'
-        p={3}
-        pb={1}
-      >
+      <Stack direction="row" justifyContent="space-between" alignItems="center" p={3} pb={1}>
         <CustomSearchBar value={searchQuery ?? ''} onSearch={setSearchQuery} />
       </Stack>
 
       <Box p={3}>
         <DataTable
-          tableName='Profiles'
+          tableName="Grados Académicos"
           columns={columns}
           data={tableData}
           totalCount={filtered.length}
@@ -155,16 +138,8 @@ export default function ProfilesView({ allProfiles }: Props) {
           }}
           actions={rowActions}
           isLoading={false}
-          height='60vh'
-          collapsible
-          renderRowDetail={row => (
-            <Box>
-              <Typography variant='subtitle2'>Complete Emails:</Typography>
-              {row.emails.map((_, i) => (
-                <TableInTable key={i} />
-              ))}
-            </Box>
-          )}
+          height="60vh"
+          collapsible={false}
           SkeletonRow={() => (
             <TableRow>
               {columns.map(col => (

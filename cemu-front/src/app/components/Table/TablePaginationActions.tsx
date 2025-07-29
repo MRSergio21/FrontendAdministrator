@@ -28,6 +28,7 @@ const TablePaginationActions = (props: TablePaginationActionsProps) => {
         onClick={handleBackButtonClick}
         disabled={page === 0}
         aria-label='previous page'
+        sx={{ color: '#424242' }}
       >
         {theme.direction === 'rtl' ? (
           <KeyboardArrowRight />
@@ -39,6 +40,7 @@ const TablePaginationActions = (props: TablePaginationActionsProps) => {
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label='next page'
+        sx={{ color: '#424242' }}
       >
         {theme.direction === 'rtl' ? (
           <KeyboardArrowLeft />

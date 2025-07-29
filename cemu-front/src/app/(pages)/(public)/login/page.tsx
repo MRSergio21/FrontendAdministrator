@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { login } from '../../../actions/auth/login';
 import Image from 'next/image';
 import CEMULogo from '../../../../../public/svg/login_header.svg';
 import {
@@ -41,8 +43,22 @@ export default function Cemu() {
     }
   };
 
-  function handleLogin(event: React.MouseEvent<HTMLButtonElement>): void {
-    throw new Error('Function not implemented.');
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  function handleLogin(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    setError(null);
+
+    startTransition(async () => {
+      const res = await login(username, password);
+      if (res.success) {
+        router.push('/dashboard');
+      } else {
+        setError(res.message || 'Error al iniciar sesión');
+      }
+    });
   }
 
   return (

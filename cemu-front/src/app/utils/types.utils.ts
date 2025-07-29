@@ -23,12 +23,14 @@ export interface Column {
   icon?: ReactNode;
   sortable?: boolean;
   align?: 'left' | 'center' | 'right';
+  width?: number;
 }
-export interface Column {
+export interface Column<T = any> {
   id: string;
   label: string;
   icon?: ReactNode;
   sortable?: boolean;
+  render?: (value: T[keyof T], row: T) => ReactNode;
 }
 
 export interface Data {
@@ -56,7 +58,7 @@ export interface TableProps<T extends Data> {
   sortBy?: string;
   orderDirection?: 'asc' | 'desc';
   handleChangeSort?: (columnId: string) => void;
-  height?: string;
   collapsible?: boolean;
   renderRowDetail?: (row: T) => React.ReactNode;
+  rounded?: boolean;
 }

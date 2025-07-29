@@ -41,14 +41,13 @@ const RowActionsMenu = ({ index, actions }: IRowActionsMenu) => {
         display: 'flex',
         justifyContent: 'end',
         alignItems: 'center',
-        gap: 10,
       }}
     >
       {outsideActions?.map(action => renderActionButton(action, action.id))}
 
       {insideActions && insideActions.length > 0 && (
         <>
-          <IconButton onClick={handleClick}>
+          <IconButton onClick={handleClick} style={{ marginRight: -8 }}>
             <MoreVertIcon fontSize='small' />
           </IconButton>
           <Menu
