@@ -1,4 +1,4 @@
-import { InternshipResponseDTO } from "../models/interneships.model";
+import { InternshipResponseDTO } from "./interneships.model";
 
 export interface RequestResponseDTO {
     id?: number;

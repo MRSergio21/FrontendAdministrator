@@ -1,13 +1,13 @@
 import React, { Suspense } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
-import AppLayout from '../../../../layouts/AppLayout'; // Ajusta import según tu estructura
+import AppLayout from '../../../../layouts/AppLayout';
 import DegreesView from '../../../../views/DegreesView';
 import type { DegreesResponseDTO } from '../../../../models/degrees.model';
 import { Box, Typography } from '@mui/material';
 
 async function fetchDegrees(): Promise<DegreesResponseDTO[]> {
   const apiUrl = process.env.apiUrl || 'http://localhost:4000';
-  const res = await fetch(`${apiUrl}/degrees`, { cache: 'no-store' }); // evitar cache en dev
+  const res = await fetch(`${apiUrl}/degrees`, { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch degrees');
   return res.json();
 }
