@@ -59,13 +59,39 @@ export default function RequestView() {
     });
   };
 
-  const handleDownload = (cvUrl: string) => {
-    if (!cvUrl) return;
-    const link = document.createElement('a');
-    link.href = cvUrl;
-    link.download = 'cv.pdf';
-    link.target = '_blank';
-    link.click();
+  // Función robusta para descargar PDFs desde Base64
+  const handleDownload = (base64Data: string | null | undefined, fileName = 'cv.pdf') => {
+    if (!base64Data) {
+      console.warn('No hay archivo para descargar');
+      return;
+    }
+
+    try {
+      // Limpiar prefijo y espacios/saltos de línea
+      const base64 = base64Data.includes(',') ? base64Data.split(',')[1] : base64Data;
+      const base64Clean = base64.replace(/\s/g, '');
+
+      const byteCharacters = atob(base64Clean);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Error al decodificar Base64:', err);
+    }
   };
 
   const filtered = useMemo(() => {
@@ -108,7 +134,7 @@ export default function RequestView() {
     name: request.nameStudent,
     lastname: request.lastnameStudent,
     email: request.email,
-    cv: request.cv,
+    cv: request.cv, // Base64
     internship: request.internship_id?.internshipTitle || 'N/A',
     actions: (
       <Stack direction="row" spacing={1} justifyContent="flex-end">
@@ -117,7 +143,11 @@ export default function RequestView() {
           {visibleIds.has(request.id) ? <VisibilityIcon /> : <VisibilityOffIcon />}
         </IconButton>
         {/* Botón de descarga */}
-        <IconButton onClick={() => handleDownload(request.cv)}>
+        <IconButton
+          onClick={() =>
+            handleDownload(request.cv, `CV_${request.lastnameStudent}.pdf`)
+          }
+        >
           <DownloadIcon />
         </IconButton>
       </Stack>
