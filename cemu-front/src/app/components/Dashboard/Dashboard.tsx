@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import ImageIcon from './ImageIcon';
-import { AccountBalance, Assessment, ContactPage, School } from '@mui/icons-material';
+import { AccountBalance, Assessment, ContactPage, School, Book } from '@mui/icons-material';
 
 const drawerWidth = 256;
 const collapsedWidth = 72;
@@ -31,6 +31,11 @@ const navItems = [
     label: 'Grados',
     path: '/dashboard/degrees/',
     icon: <School />, 
+  },
+    {
+    label: 'Solicitudes de Prácticas Profesionales',
+    path: '/dashboard/request/',
+    icon: <Book />, 
   },
   {
     label: 'Estadísticas',

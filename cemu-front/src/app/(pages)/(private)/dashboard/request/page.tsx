@@ -1,21 +1,21 @@
 import React, { Suspense } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import AppLayout from '../../../../layouts/AppLayout';
-import DegreesView from '../../../../views/DegreesView';
-import type { DegreesResponseDTO } from '../../../../models/degrees.model';
+import RequestView from '../../../../views/RequestView';
+import type { RequestResponseDTO } from '../../../../models/request.model';
 import { Box, Typography } from '@mui/material';
 
-async function fetchDegrees(): Promise<DegreesResponseDTO[]> {
-  const apiUrl = process.env.apiUrl || 'http://localhost:4000';
-  const res = await fetch(`${apiUrl}/degrees`, { cache: 'no-store' });
-  if (!res.ok) throw new Error('Failed to fetch degrees');
+async function fetchRequest(): Promise<RequestResponseDTO[]> {
+  const apiUrl = process.env.apiUrl;
+  const res = await fetch(`${apiUrl}/requests`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch requests');
   return res.json();
 }
 
-export default async function DegreesPage() {
-  let degreesList: DegreesResponseDTO[] = [];
+export default async function RequestPage() {
+  let requestList: RequestResponseDTO[] = [];
   try {
-    degreesList = await fetchDegrees();
+    requestList = await fetchRequest();
   } catch (error) {
     console.error('Error loading degrees:', error);
   }
@@ -31,10 +31,10 @@ export default async function DegreesPage() {
             fontSize: "22px",
           }}
         >
-          Lista de Grados
+          Lista de Solicitudes para las Prácticas Profesionales
         </Typography>
         <Suspense fallback={<CircularProgress sx={{ m: 'auto', mt: 4 }} />}>
-          <DegreesView allDegrees={degreesList} />
+          <RequestView allRequest={requestList} />
         </Suspense>
       </Box>
     </AppLayout>
