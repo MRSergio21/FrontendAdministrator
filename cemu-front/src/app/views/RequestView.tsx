@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useQueryState } from 'nuqs';
 import {
   Box,
@@ -19,6 +19,7 @@ import { DataTable } from '../components/Table/DataTable';
 
 import type { Column } from '@/app/utils/types.utils';
 import { useRequestQueryList } from '@/app/hooks/useRequest';
+import { updateRequestAction } from '@/app/actions/api/request/update';
 
 export default function RequestView() {
   const { data: allRequests = [], isLoading } = useRequestQueryList();
@@ -47,37 +48,56 @@ export default function RequestView() {
 
   const [visibleIds, setVisibleIds] = useState<Set<string>>(new Set());
 
-  const toggleVisibility = (id: string) => {
-    setVisibleIds(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-      return newSet;
-    });
-  };
+  useEffect(() => {
+    const initialVisible = new Set(
+      allRequests
+        .filter(req => req.status === true) // ojo abierto
+        .map(req => req.id)
+    );
+    setVisibleIds(initialVisible);
+  }, [allRequests]);
 
-  // Función robusta para descargar PDFs desde Base64
-  const handleDownload = (base64Data: string | null | undefined, fileName = 'cv.pdf') => {
-    if (!base64Data) {
-      console.warn('No hay archivo para descargar');
-      return;
-    }
+  const mapRequestToInput = (request: any, status: boolean) => ({
+    nameStudent: request.nameStudent,
+    lastnameStudent: request.lastnameStudent,
+    email: request.email,
+    cv: request.cv,
+    internship_id: request.internship_id?.id || request.internship_id,
+    status,
+  });
+
+  const toggleVisibility = async (request: any) => {
+    const isVisible = visibleIds.has(request.id);
 
     try {
-      // Limpiar prefijo y espacios/saltos de línea
+      await updateRequestAction(request.id, mapRequestToInput(request, !isVisible));
+
+      setVisibleIds(prev => {
+        const newSet = new Set(prev);
+        if (newSet.has(request.id)) {
+          newSet.delete(request.id);
+        } else {
+          newSet.add(request.id);
+        }
+        return newSet;
+      });
+    } catch (error) {
+      console.error('Error actualizando el status:', error);
+    }
+  };
+
+  const handleDownload = (base64Data: string | null | undefined, fileName = 'cv.pdf') => {
+    if (!base64Data) return;
+
+    try {
       const base64 = base64Data.includes(',') ? base64Data.split(',')[1] : base64Data;
       const base64Clean = base64.replace(/\s/g, '');
-
       const byteCharacters = atob(base64Clean);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
       const byteArray = new Uint8Array(byteNumbers);
-
       const blob = new Blob([byteArray], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
 
@@ -86,7 +106,6 @@ export default function RequestView() {
       link.download = fileName;
       document.body.appendChild(link);
       link.click();
-
       link.remove();
       window.URL.revokeObjectURL(url);
     } catch (err) {
@@ -134,24 +153,23 @@ export default function RequestView() {
     name: request.nameStudent,
     lastname: request.lastnameStudent,
     email: request.email,
-    cv: request.cv, // Base64
+    cv: request.cv,
     internship: request.internship_id?.internshipTitle || 'N/A',
     actions: (
       <Stack direction="row" spacing={1} justifyContent="flex-end">
-        {/* Botón de visibilidad */}
-        <IconButton onClick={() => toggleVisibility(request.id)}>
+        <IconButton onClick={() => toggleVisibility(request)}>
           {visibleIds.has(request.id) ? <VisibilityIcon /> : <VisibilityOffIcon />}
         </IconButton>
-        {/* Botón de descarga */}
         <IconButton
-          onClick={() =>
-            handleDownload(request.cv, `CV_${request.lastnameStudent}.pdf`)
-          }
+          onClick={() => handleDownload(request.cv, `CV_${request.lastnameStudent}.pdf`)}
         >
           <DownloadIcon />
         </IconButton>
       </Stack>
     ),
+    rowStyle: {
+      backgroundColor: visibleIds.has(request.id) ? 'transparent' : '#e3f2fd',
+    },
   }));
 
   return (
@@ -198,6 +216,7 @@ export default function RequestView() {
               ))}
             </TableRow>
           )}
+          rowStyle={(row: any) => row.rowStyle}
         />
       </Box>
     </>
