@@ -46,10 +46,7 @@ Este proyecto es una aplicación web para la **gestión de prácticas profesiona
 - **Frontend:** React + Next.js + TypeScript  
 - **Estilos:** TailwindCSS + Material UI (MUI)  
 - **Gráficas:** Recharts  
-- **Backend:** Node.js + Express + TypeScript  
 - **Autenticación:** JSON Web Token (JWT)  
-- **Base de datos:** Prisma + PostgreSQL/MySQL  
-- **ORM:** Prisma  
 
 ---
 
